@@ -10,7 +10,8 @@ std::string_view GuiController::name() const {
 }
 void GuiController::initialize() {
     set_enable(false);
-
+    auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+    platform->set_enable_cursor(false);
 }
 void GuiController::draw() {
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
@@ -31,6 +32,7 @@ void GuiController::poll_events() {
     auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
     if (platform->key(engine::platform::KeyId::KEY_F2).state() == engine::platform::Key::State::JustPressed) {
         set_enable(!is_enabled());
+        platform->set_enable_cursor(is_enabled());
     }
 }
 }// namespace app

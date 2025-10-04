@@ -11,6 +11,8 @@ bool loop() override;
     void begin_draw() override;
     void end_draw() override;
     void draw_backpack();
+    void draw_road();
+    void draw_skybox();
     void draw() override;
 
     void update_camera();
