@@ -60,10 +60,13 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 diffuseColor = texture(material.diffuse, TexCoords).rgb;
     vec3 specularColor = texture(material.specular, TexCoords).rgb;
 
-    // If specular map seems invalid (very low values or strange colors), use white
     float specularIntensity = dot(specularColor, vec3(0.299, 0.587, 0.114));
-    if (specularIntensity < 0.1) {
-        specularColor = vec3(1.0);
+    bool hasGreenArtifact = (specularColor.g > specularColor.r * 1.5) && (specularColor.g > specularColor.b * 1.5);
+    bool isLowIntensity = specularIntensity < 0.15;
+    bool hasExtremeValues = any(greaterThan(specularColor, vec3(1.5))) || any(lessThan(specularColor, vec3(0.0)));
+
+    if (hasGreenArtifact || isLowIntensity || hasExtremeValues) {
+        specularColor = vec3(0.8);  // Use neutral gray instead of problematic data
     }
 
     vec3 ambient = light.ambient * diffuseColor;

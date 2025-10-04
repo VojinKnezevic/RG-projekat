@@ -12,6 +12,7 @@ bool loop() override;
     void end_draw() override;
     void draw_backpack();
     void draw_road();
+    void draw_lamp_post();
     void draw_skybox();
     void draw() override;
 

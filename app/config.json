@@ -6,6 +6,9 @@
       },
       "road_segment" : {
         "path" : "road_segment/scene.gltf"
+      },
+      "lamp_post" : {
+        "path" : "lamp_post/scene.gltf"
       }
     }
   },
