@@ -54,6 +54,16 @@ void MainController::draw_road() {
     shader->use();
     shader->set_mat4("projection", graphics->projection_matrix());
     shader->set_mat4("view", graphics->camera()->view_matrix());
+    shader->set_vec3("viewPos", graphics->camera()->Position);
+
+    shader->set_vec3("dirLight.direction", glm::vec3(0.3f, -0.7f, 0.2f));
+    shader->set_vec3("dirLight.ambient", glm::vec3(0.4f, 0.35f, 0.2f));
+    shader->set_vec3("dirLight.diffuse", glm::vec3(1.2f, 1.0f, 0.8f));
+    shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 0.95f, 0.9f));
+
+    shader->set_int("material.diffuse", 0);
+    shader->set_int("material.specular", 1);
+    shader->set_float("material.shininess", 64.0f);
 
     for (int i = 0; i < 3; i++) {
         glm::mat4 model = glm::mat4(1.0f);
