@@ -24,6 +24,24 @@ void GuiController::draw() {
 
     ImGui::Text("Camera pos(%f %f %f)", camera->Position.x, camera->Position.y, camera->Position.z);
 
+    ImGui::Separator();
+
+    if (ImGui::CollapsingHeader("SUNCE")) {
+        ImGui::Text("vec3");
+        ImGui::SliderFloat3("##Direction", &sunlight_direction.x, -1.0f, 1.0f);
+
+        ImGui::Separator();
+
+        ImGui::Text("Amb");
+        ImGui::ColorEdit3("##Ambient", &sunlight_ambient.x);
+
+        ImGui::Text("Diff");
+        ImGui::ColorEdit3("##Diffuse", &sunlight_diffuse.x);
+
+        ImGui::Text("Spec");
+        ImGui::ColorEdit3("##Specular", &sunlight_specular.x);
+    }
+
     ImGui::End();
 
     graphics->end_gui();

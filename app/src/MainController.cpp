@@ -47,19 +47,20 @@ void MainController::end_draw() {
 void MainController::draw_road() {
     auto resource = engine::core::Controller::get<engine::resources::ResourcesController>();
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    auto gui_controller = engine::core::Controller::get<GuiController>();
     engine::resources::Model *road = resource->model("road_segment");
 
-    engine::resources::Shader *shader = resource->shader("road");
+    engine::resources::Shader *shader = resource->shader("gltf");
 
     shader->use();
     shader->set_mat4("projection", graphics->projection_matrix());
     shader->set_mat4("view", graphics->camera()->view_matrix());
     shader->set_vec3("viewPos", graphics->camera()->Position);
 
-    shader->set_vec3("dirLight.direction", glm::vec3(0.3f, -0.7f, 0.2f));
-    shader->set_vec3("dirLight.ambient", glm::vec3(0.4f, 0.35f, 0.2f));
-    shader->set_vec3("dirLight.diffuse", glm::vec3(1.2f, 1.0f, 0.8f));
-    shader->set_vec3("dirLight.specular", glm::vec3(1.0f, 0.95f, 0.9f));
+    shader->set_vec3("dirLight.direction", gui_controller->sunlight_direction);
+    shader->set_vec3("dirLight.ambient", gui_controller->sunlight_ambient);
+    shader->set_vec3("dirLight.diffuse", gui_controller->sunlight_diffuse);
+    shader->set_vec3("dirLight.specular", gui_controller->sunlight_specular);
 
     shader->set_int("material.diffuse", 0);
     shader->set_int("material.specular", 1);
