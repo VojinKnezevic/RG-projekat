@@ -1,4 +1,5 @@
 #include "../include/GuiController.hpp"
+#include "../include/InstanceController.hpp"
 
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/platform/PlatformController.hpp"
@@ -138,6 +139,47 @@ void GuiController::draw() {
             }
 
             ImGui::PopID();
+        }
+    }
+
+    ImGui::Separator();
+
+    if (ImGui::CollapsingHeader("INSTANCING")) {
+        auto instance_controller = engine::core::Controller::get<InstanceController>();
+
+        ImGui::Checkbox("Use Instanced Rendering", &instance_controller->use_instanced_rendering);
+
+        if (ImGui::TreeNode("Road Segments")) {
+            ImGui::SliderInt("Count", &instance_controller->road_segment_count, 1, 100);
+            ImGui::SliderFloat("Spacing", &instance_controller->road_spacing, 5.0f, 20.0f);
+
+            ImGui::Text("Start Position");
+            ImGui::SliderFloat3("##RoadStart", &instance_controller->road_start_position.x, -50.0f, 50.0f);
+
+            ImGui::Text("Scale");
+            ImGui::SliderFloat3("##RoadScale", &instance_controller->road_scale.x, 0.01f, 0.1f);
+
+            ImGui::Text("Current count: %d", instance_controller->road_segment_count);
+
+            ImGui::TreePop();
+        }
+
+        ImGui::Separator();
+        ImGui::Checkbox("Use Lamp Instancing", &instance_controller->use_lamp_instancing);
+
+        if (ImGui::TreeNode("Lamp Posts")) {
+            ImGui::SliderInt("Count", &instance_controller->lamp_count, 1, 20);
+            ImGui::SliderFloat("Spacing", &instance_controller->lamp_spacing, 2.0f, 15.0f);
+
+            ImGui::Text("Start Position");
+            ImGui::SliderFloat3("##LampStart", &instance_controller->lamp_start_position.x, -50.0f, 50.0f);
+
+            ImGui::Text("Scale");
+            ImGui::SliderFloat3("##LampScale", &instance_controller->lamp_scale.x, 0.005f, 0.05f);
+
+            ImGui::Text("Current count: %d", instance_controller->lamp_count);
+
+            ImGui::TreePop();
         }
     }
 

@@ -1,6 +1,7 @@
 #include "../include/MainController.hpp"
 
 #include "GuiController.hpp"
+#include "InstanceController.hpp"
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/OpenGL.hpp"
 #include "engine/platform/PlatformController.hpp"
@@ -48,6 +49,7 @@ void MainController::draw_road() {
     auto resource = engine::core::Controller::get<engine::resources::ResourcesController>();
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
     auto gui_controller = engine::core::Controller::get<GuiController>();
+    auto instance_controller = engine::core::Controller::get<InstanceController>();
     engine::resources::Model *road = resource->model("road_segment");
 
     engine::resources::Shader *shader = resource->shader("gltf");
@@ -89,10 +91,28 @@ void MainController::draw_road() {
         shader->set_float(base + ".outerCutOff", gui_controller->spot_lights[i].outerCutOff);
     }
 
-    for (int i = 0; i < 3; i++) {
+    // Simple road rendering - check if we should use instanced count
+    int roadCount = 3; // default
+    glm::vec3 startPos = glm::vec3(5.0f, -1.0f, -3.0f);
+    float spacing = 12.0f;
+    glm::vec3 scale = glm::vec3(0.02f);
+
+    if (instance_controller->use_instanced_rendering) {
+        roadCount = instance_controller->road_segment_count;
+        startPos = instance_controller->road_start_position;
+        spacing = instance_controller->road_spacing;
+        scale = instance_controller->road_scale;
+    }
+
+    for (int i = 0; i < roadCount; i++) {
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(5.0f, -1.0f, 12.0f * i - 3.0f));
-        model = glm::scale(model, glm::vec3(0.02f));
+
+        // Center the road layout: offset so the middle road is at startPos
+        float offset = spacing * (i - roadCount / 2.0f);
+        glm::vec3 position = startPos + glm::vec3(0, 0, offset);
+
+        model = glm::translate(model, position);
+        model = glm::scale(model, scale);
 
         shader->set_mat4("model", model);
         road->draw(shader);
@@ -143,16 +163,30 @@ void MainController::draw_lamp_post() {
         shader->set_float(base + ".outerCutOff", gui_controller->spot_lights[i].outerCutOff);
     }
 
-    for (int i = 0; i < 3; i++) {
+    // Simple lamp rendering - check if we should use instanced count
+    auto instance_controller = engine::core::Controller::get<InstanceController>();
+    int lampCount = 3; // default
+    glm::vec3 startPos = glm::vec3(6.0f, -0.7f, -8.0f);
+    float spacing = 8.0f;
+    glm::vec3 scale = glm::vec3(0.015f);
+
+    if (instance_controller->use_lamp_instancing) {
+        lampCount = instance_controller->lamp_count;
+        startPos = instance_controller->lamp_start_position;
+        spacing = instance_controller->lamp_spacing;
+        scale = instance_controller->lamp_scale;
+    }
+
+    for (int i = 0; i < lampCount; i++) {
         glm::mat4 model = glm::mat4(1.0f);
 
-        model = glm::translate(model, glm::vec3(6.0f, -0.7f, -8.0f + 8.0f * i));
+        // Always start from startPos and add lamps in sequence
+        glm::vec3 position = startPos + glm::vec3(0, 0, spacing * i);
+
+        model = glm::translate(model, position);
         model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-        model = glm::scale(model, glm::vec3(0.015f));
-
+        model = glm::scale(model, scale);
         model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
 
         shader->set_mat4("model", model);
         lamp_post->draw(shader);

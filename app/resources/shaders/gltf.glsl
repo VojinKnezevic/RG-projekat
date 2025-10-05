@@ -4,6 +4,7 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
+layout (location = 3) in mat4 aInstanceMatrix;
 
 out vec2 TexCoords;
 out vec3 Normal;
@@ -12,11 +13,14 @@ out vec3 FragPos;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform bool useInstancing;
 
 void main()
 {
-    FragPos = vec3(model * vec4(aPos, 1.0));
-    Normal = mat3(transpose(inverse(model))) * aNormal;
+    mat4 modelMatrix = useInstancing ? aInstanceMatrix : model;
+
+    FragPos = vec3(modelMatrix * vec4(aPos, 1.0));
+    Normal = mat3(transpose(inverse(modelMatrix))) * aNormal;
     TexCoords = aTexCoords;
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }
@@ -172,6 +176,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     vec3 diffuseColor = texture(material.diffuse, TexCoords).rgb;
     vec3 specularColor = texture(material.specular, TexCoords).rgb;
 
+    // Check for invalid/missing textures
     bool hasInvalidDiffuse = (diffuseColor.r > 0.8 && diffuseColor.g < 0.2 && diffuseColor.b > 0.8) ||
                             (diffuseColor.g > 0.8 && diffuseColor.r < 0.2 && diffuseColor.b < 0.2) ||
                             (diffuseColor.r > 0.95 && diffuseColor.g > 0.95 && diffuseColor.b > 0.95);

@@ -3,7 +3,9 @@
 #include <engine/core/Controller.hpp>
 #include <glm/glm.hpp>
 #include <array>
+
 namespace app {
+class InstanceController;
 
 struct PointLight {
     bool enabled = false;
