@@ -14,6 +14,7 @@ bool loop() override;
     void draw_road();
     void draw_lamp_post();
     void draw_light_bulbs();
+    void draw_nissan();
     void draw_skybox();
     void draw() override;
 

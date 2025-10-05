@@ -12,6 +12,9 @@
       },
       "light_bulb" : {
         "path" : "light_bulb/scene.gltf"
+      },
+      "nissan" : {
+        "path" : "nissan/s15.obj"
       }
     }
   },

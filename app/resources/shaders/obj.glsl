@@ -29,7 +29,6 @@ out vec4 FragColor;
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
-    sampler2D normal;
     float shininess;
 };
 
@@ -63,30 +62,20 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
     vec3 lightDir = normalize(-light.direction);
-
     float diff = max(dot(normal, lightDir), 0.0);
 
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-
     vec3 diffuseColor = texture(material.diffuse, TexCoords).rgb;
-    vec3 specularColor = texture(material.specular, TexCoords).rgb;
 
-    bool hasInvalidDiffuse = (diffuseColor.r > 0.8 && diffuseColor.g < 0.2 && diffuseColor.b > 0.8) ||
-                            (diffuseColor.g > 0.8 && diffuseColor.r < 0.2 && diffuseColor.b < 0.2) ||
-                            (diffuseColor.r > 0.95 && diffuseColor.g > 0.95 && diffuseColor.b > 0.95);
+    // OBJ files often have actual textures or white fallbacks
+    // Check for white/invalid textures and provide good car colors
+    float brightness = dot(diffuseColor, vec3(0.299, 0.587, 0.114));
+    bool isWhiteOrInvalid = brightness > 0.9 ||
+                           (diffuseColor.r > 0.9 && diffuseColor.g > 0.9 && diffuseColor.b > 0.9) ||
+                           (diffuseColor.r > 0.8 && diffuseColor.g < 0.2 && diffuseColor.b > 0.8);
 
-    if (hasInvalidDiffuse) {
-        diffuseColor = vec3(0.6, 0.6, 0.7); // Use bluish-gray for better visibility
-    }
-
-    float specularIntensity = dot(specularColor, vec3(0.299, 0.587, 0.114));
-    bool hasGreenArtifact = (specularColor.g > specularColor.r * 1.5) && (specularColor.g > specularColor.b * 1.5);
-    bool isLowIntensity = specularIntensity < 0.15;
-    bool hasExtremeValues = any(greaterThan(specularColor, vec3(1.5))) || any(lessThan(specularColor, vec3(0.0)));
-
-    if (hasGreenArtifact || isLowIntensity || hasExtremeValues) {
-        specularColor = vec3(0.8);  // Use neutral gray instead of problematic data
+    if (isWhiteOrInvalid) {
+        // Use red color for Alfa Romeo
+        diffuseColor = vec3(0.8, 0.1, 0.1);
     }
 
     vec3 ambient = light.ambient * diffuseColor;
@@ -103,39 +92,26 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
     vec3 lightDir = normalize(light.position - fragPos);
     float distance = length(light.position - fragPos);
-
     float diff = max(dot(normal, lightDir), 0.0);
-
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     vec3 diffuseColor = texture(material.diffuse, TexCoords).rgb;
-    vec3 specularColor = texture(material.specular, TexCoords).rgb;
 
-    bool hasInvalidDiffuse = (diffuseColor.r > 0.8 && diffuseColor.g < 0.2 && diffuseColor.b > 0.8) ||
-                            (diffuseColor.g > 0.8 && diffuseColor.r < 0.2 && diffuseColor.b < 0.2) ||
-                            (diffuseColor.r > 0.95 && diffuseColor.g > 0.95 && diffuseColor.b > 0.95);
+    // Same texture validation as directional light
+    float brightness = dot(diffuseColor, vec3(0.299, 0.587, 0.114));
+    bool isWhiteOrInvalid = brightness > 0.9 ||
+                           (diffuseColor.r > 0.9 && diffuseColor.g > 0.9 && diffuseColor.b > 0.9) ||
+                           (diffuseColor.r > 0.8 && diffuseColor.g < 0.2 && diffuseColor.b > 0.8);
 
-    if (hasInvalidDiffuse) {
-        diffuseColor = vec3(0.6, 0.6, 0.7); 
-    }
-
-    float specularIntensity = dot(specularColor, vec3(0.299, 0.587, 0.114));
-    bool hasGreenArtifact = (specularColor.g > specularColor.r * 1.5) && (specularColor.g > specularColor.b * 1.5);
-    bool isLowIntensity = specularIntensity < 0.15;
-    bool hasExtremeValues = any(greaterThan(specularColor, vec3(1.5))) || any(lessThan(specularColor, vec3(0.0)));
-
-    if (hasGreenArtifact || isLowIntensity || hasExtremeValues) {
-        specularColor = vec3(0.8);
+    if (isWhiteOrInvalid) {
+        // Use red color for Alfa Romeo
+        diffuseColor = vec3(0.8, 0.1, 0.1);
     }
 
     vec3 ambient = light.color * 0.1 * diffuseColor;
     vec3 diffuse = light.color * diff * diffuseColor;
-    vec3 specular = light.color * spec * specularColor;
 
-    return (ambient + diffuse + specular) * attenuation;
+    return (ambient + diffuse) * attenuation;
 }
 
 void main() {
