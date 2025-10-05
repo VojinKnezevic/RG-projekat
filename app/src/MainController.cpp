@@ -179,7 +179,7 @@ void MainController::draw_light_bulbs() {
 }
 void MainController::draw_skybox() {
     auto resource = engine::core::Controller::get<engine::resources::ResourcesController>();
-    auto skybox = resource->skybox("mt_skybox");
+    auto skybox = resource->skybox("sunset_sb");
 
     auto shader = resource->shader("skybox");
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
