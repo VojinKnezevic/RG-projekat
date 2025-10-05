@@ -14,6 +14,18 @@ struct PointLight {
     float quadratic = 0.032f;
 };
 
+struct SpotLight {
+    bool enabled = true;
+    glm::vec3 position = glm::vec3(0.0f);
+    glm::vec3 direction = glm::vec3(0.0f, -1.0f, 0.0f);
+    glm::vec3 color = glm::vec3(1.0f, 0.9f, 0.7f);
+    float constant = 1.0f;
+    float linear = 0.09f;
+    float quadratic = 0.032f;
+    float cutOff = 12.5f;
+    float outerCutOff = 15.0f;
+};
+
 class GuiController : public engine::core::Controller {
 public:
     std::string_view name() const override;
@@ -24,6 +36,7 @@ public:
     glm::vec3 sunlight_specular = glm::vec3(1.0f, 0.95f, 0.9f);
 
     std::array<PointLight, 3> point_lights;
+    std::array<SpotLight, 2> spot_lights;
 
 private:
     void initialize() override;

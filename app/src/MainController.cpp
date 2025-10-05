@@ -76,6 +76,19 @@ void MainController::draw_road() {
         shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
     }
 
+    for (int i = 0; i < 2; i++) {
+        std::string base = "spotLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->spot_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->spot_lights[i].position);
+        shader->set_vec3(base + ".direction", gui_controller->spot_lights[i].direction);
+        shader->set_vec3(base + ".color", gui_controller->spot_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->spot_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->spot_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->spot_lights[i].quadratic);
+        shader->set_float(base + ".cutOff", gui_controller->spot_lights[i].cutOff);
+        shader->set_float(base + ".outerCutOff", gui_controller->spot_lights[i].outerCutOff);
+    }
+
     for (int i = 0; i < 3; i++) {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(5.0f, -1.0f, 12.0f * i - 3.0f));
@@ -115,6 +128,19 @@ void MainController::draw_lamp_post() {
         shader->set_float(base + ".constant", gui_controller->point_lights[i].constant);
         shader->set_float(base + ".linear", gui_controller->point_lights[i].linear);
         shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        std::string base = "spotLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->spot_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->spot_lights[i].position);
+        shader->set_vec3(base + ".direction", gui_controller->spot_lights[i].direction);
+        shader->set_vec3(base + ".color", gui_controller->spot_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->spot_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->spot_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->spot_lights[i].quadratic);
+        shader->set_float(base + ".cutOff", gui_controller->spot_lights[i].cutOff);
+        shader->set_float(base + ".outerCutOff", gui_controller->spot_lights[i].outerCutOff);
     }
 
     for (int i = 0; i < 3; i++) {
@@ -165,6 +191,19 @@ void MainController::draw_light_bulbs() {
         shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
     }
 
+    for (int i = 0; i < 2; i++) {
+        std::string base = "spotLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->spot_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->spot_lights[i].position);
+        shader->set_vec3(base + ".direction", gui_controller->spot_lights[i].direction);
+        shader->set_vec3(base + ".color", gui_controller->spot_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->spot_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->spot_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->spot_lights[i].quadratic);
+        shader->set_float(base + ".cutOff", gui_controller->spot_lights[i].cutOff);
+        shader->set_float(base + ".outerCutOff", gui_controller->spot_lights[i].outerCutOff);
+    }
+
     for (int i = 0; i < 3; i++) {
         if (gui_controller->point_lights[i].enabled) {
             glm::mat4 model = glm::mat4(1.0f);
@@ -207,6 +246,19 @@ void MainController::draw_nissan() {
         shader->set_float(base + ".constant", gui_controller->point_lights[i].constant);
         shader->set_float(base + ".linear", gui_controller->point_lights[i].linear);
         shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        std::string base = "spotLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->spot_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->spot_lights[i].position);
+        shader->set_vec3(base + ".direction", gui_controller->spot_lights[i].direction);
+        shader->set_vec3(base + ".color", gui_controller->spot_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->spot_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->spot_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->spot_lights[i].quadratic);
+        shader->set_float(base + ".cutOff", gui_controller->spot_lights[i].cutOff);
+        shader->set_float(base + ".outerCutOff", gui_controller->spot_lights[i].outerCutOff);
     }
 
     glm::mat4 model = glm::mat4(1.0f);

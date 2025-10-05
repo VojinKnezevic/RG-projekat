@@ -48,7 +48,20 @@ struct PointLight {
     float quadratic;
 };
 
+struct SpotLight {
+    bool enabled;
+    vec3 position;
+    vec3 direction;
+    vec3 color;
+    float constant;
+    float linear;
+    float quadratic;
+    float cutOff;
+    float outerCutOff;
+};
+
 #define MAX_POINT_LIGHTS 4
+#define MAX_SPOT_LIGHTS 2
 
 in vec2 TexCoords;
 in vec3 Normal;
@@ -58,6 +71,7 @@ uniform vec3 viewPos;
 uniform Material material;
 uniform DirLight dirLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
+uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
@@ -114,6 +128,39 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     return (ambient + diffuse) * attenuation;
 }
 
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+    if (!light.enabled) {
+        return vec3(0.0);
+    }
+
+    vec3 lightDir = normalize(light.position - fragPos);
+    float distance = length(light.position - fragPos);
+
+    float theta = dot(lightDir, normalize(-light.direction));
+    float epsilon = cos(radians(light.cutOff)) - cos(radians(light.outerCutOff));
+    float intensity = clamp((theta - cos(radians(light.outerCutOff))) / epsilon, 0.0, 1.0);
+
+    float diff = max(dot(normal, lightDir), 0.0);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+
+    vec3 diffuseColor = texture(material.diffuse, TexCoords).rgb;
+
+    float brightness = dot(diffuseColor, vec3(0.299, 0.587, 0.114));
+    bool isWhiteOrInvalid = brightness > 0.9 ||
+                           (diffuseColor.r > 0.9 && diffuseColor.g > 0.9 && diffuseColor.b > 0.9) ||
+                           (diffuseColor.r > 0.8 && diffuseColor.g < 0.2 && diffuseColor.b > 0.8);
+
+    if (isWhiteOrInvalid) {
+        diffuseColor = vec3(0.8, 0.1, 0.1);
+    }
+
+    vec3 ambient = light.color * 0.1 * diffuseColor;
+    vec3 diffuse = light.color * diff * diffuseColor;
+
+    return (ambient + diffuse) * attenuation * intensity;
+}
+
 void main() {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
@@ -122,6 +169,10 @@ void main() {
 
     for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    }
+
+    for (int i = 0; i < MAX_SPOT_LIGHTS; i++) {
+        result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
     }
 
     FragColor = vec4(result, 1.0);
