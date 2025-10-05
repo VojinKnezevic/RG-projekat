@@ -66,9 +66,19 @@ void MainController::draw_road() {
     shader->set_int("material.specular", 1);
     shader->set_float("material.shininess", 64.0f);
 
+    for (int i = 0; i < 4; i++) {
+        std::string base = "pointLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->point_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->point_lights[i].position);
+        shader->set_vec3(base + ".color", gui_controller->point_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->point_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->point_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
+    }
+
     for (int i = 0; i < 3; i++) {
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(5.0f, -1.0f, 10.0f * i - 3.0f));
+        model = glm::translate(model, glm::vec3(5.0f, -1.0f, 12.0f * i - 3.0f));
         model = glm::scale(model, glm::vec3(0.02f));
 
         shader->set_mat4("model", model);
@@ -97,6 +107,16 @@ void MainController::draw_lamp_post() {
     shader->set_int("material.specular", 1);
     shader->set_float("material.shininess", 32.0f);
 
+    for (int i = 0; i < 4; i++) {
+        std::string base = "pointLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->point_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->point_lights[i].position);
+        shader->set_vec3(base + ".color", gui_controller->point_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->point_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->point_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
+    }
+
     for (int i = 0; i < 3; i++) {
         glm::mat4 model = glm::mat4(1.0f);
 
@@ -110,6 +130,51 @@ void MainController::draw_lamp_post() {
 
         shader->set_mat4("model", model);
         lamp_post->draw(shader);
+    }
+}
+void MainController::draw_light_bulbs() {
+    auto resource = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    auto gui_controller = engine::core::Controller::get<GuiController>();
+    engine::resources::Model *light_bulb = resource->model("light_bulb");
+
+    engine::resources::Shader *shader = resource->shader("gltf");
+
+    shader->use();
+    shader->set_mat4("projection", graphics->projection_matrix());
+    shader->set_mat4("view", graphics->camera()->view_matrix());
+    shader->set_vec3("viewPos", graphics->camera()->Position);
+
+    shader->set_vec3("dirLight.direction", gui_controller->sunlight_direction);
+    shader->set_vec3("dirLight.ambient", gui_controller->sunlight_ambient);
+    shader->set_vec3("dirLight.diffuse", gui_controller->sunlight_diffuse);
+    shader->set_vec3("dirLight.specular", gui_controller->sunlight_specular);
+
+    shader->set_int("material.diffuse", 0);
+    shader->set_int("material.specular", 1);
+    shader->set_float("material.shininess", 32.0f);
+
+    for (int i = 0; i < 3; i++) {
+        std::string base = "pointLights[" + std::to_string(i) + "]";
+        shader->set_bool(base + ".enabled", gui_controller->point_lights[i].enabled);
+        shader->set_vec3(base + ".position", gui_controller->point_lights[i].position);
+
+        shader->set_vec3(base + ".color", gui_controller->point_lights[i].color);
+        shader->set_float(base + ".constant", gui_controller->point_lights[i].constant);
+        shader->set_float(base + ".linear", gui_controller->point_lights[i].linear);
+        shader->set_float(base + ".quadratic", gui_controller->point_lights[i].quadratic);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (gui_controller->point_lights[i].enabled) {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, gui_controller->point_lights[i].position);
+            model = glm::scale(model, glm::vec3(0.8f));
+            model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+            shader->set_mat4("model", model);
+            light_bulb->draw(shader);
+        }
     }
 }
 void MainController::draw_skybox() {
@@ -128,6 +193,7 @@ void MainController::draw_skybox() {
 void MainController::draw() {
     draw_road();
     draw_lamp_post();
+    draw_light_bulbs();
     draw_skybox();
 }
 void MainController::update_camera() {

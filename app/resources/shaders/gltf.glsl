@@ -40,6 +40,17 @@ struct DirLight {
     vec3 specular;
 };
 
+struct PointLight {
+    bool enabled;
+    vec3 position;
+    vec3 color;
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+#define MAX_POINT_LIGHTS 4
+
 in vec2 TexCoords;
 in vec3 Normal;
 in vec3 FragPos;
@@ -47,6 +58,7 @@ in vec3 FragPos;
 uniform vec3 viewPos;
 uniform Material material;
 uniform DirLight dirLight;
+uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
@@ -76,11 +88,50 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     return (ambient + diffuse + specular);
 }
 
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+    if (!light.enabled) {
+        return vec3(0.0);
+    }
+
+    vec3 lightDir = normalize(light.position - fragPos);
+    float distance = length(light.position - fragPos);
+
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+
+    vec3 diffuseColor = texture(material.diffuse, TexCoords).rgb;
+    vec3 specularColor = texture(material.specular, TexCoords).rgb;
+
+    float specularIntensity = dot(specularColor, vec3(0.299, 0.587, 0.114));
+    bool hasGreenArtifact = (specularColor.g > specularColor.r * 1.5) && (specularColor.g > specularColor.b * 1.5);
+    bool isLowIntensity = specularIntensity < 0.15;
+    bool hasExtremeValues = any(greaterThan(specularColor, vec3(1.5))) || any(lessThan(specularColor, vec3(0.0)));
+
+    if (hasGreenArtifact || isLowIntensity || hasExtremeValues) {
+        specularColor = vec3(0.8);
+    }
+
+    vec3 ambient = light.color * 0.1 * diffuseColor;
+    vec3 diffuse = light.color * diff * diffuseColor;
+    vec3 specular = light.color * spec * specularColor;
+
+    return (ambient + diffuse + specular) * attenuation;
+}
+
 void main() {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
+
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    }
 
     FragColor = vec4(result, 1.0);
 }

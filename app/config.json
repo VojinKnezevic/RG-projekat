@@ -9,6 +9,9 @@
       },
       "lamp_post" : {
         "path" : "lamp_post/scene.gltf"
+      },
+      "light_bulb" : {
+        "path" : "light_bulb/scene.gltf"
       }
     }
   },
