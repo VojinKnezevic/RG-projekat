@@ -16,10 +16,15 @@ bool loop() override;
     void draw_light_bulbs();
     void draw_nissan();
     void draw_skybox();
+    void draw_test_cube();
     void draw() override;
 
     void update_camera();
     void update() override;
+    void setup_cube();
+
+    unsigned int m_cube_vao = 0;
+    unsigned int m_cube_vbo = 0;
 
 public:
     std::string_view name() const override {

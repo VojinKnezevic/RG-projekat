@@ -40,6 +40,10 @@ public:
     std::array<PointLight, 3> point_lights;
     std::array<SpotLight, 2> spot_lights;
 
+    glm::vec3 test_cube_position = glm::vec3(12.0f, -0.23f, 0.78f);
+    glm::vec3 test_cube_scale = glm::vec3(1.666f, 0.2f, 0.25f);
+    glm::vec3 test_cube_color = glm::vec3(8.0f, 8.0f, 8.0f);
+
 private:
     void initialize() override;
     void draw() override;

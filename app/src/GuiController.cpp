@@ -156,6 +156,19 @@ void GuiController::draw() {
 
     ImGui::Separator();
 
+    if (ImGui::CollapsingHeader("TEST CUBE")) {
+        ImGui::Text("Position");
+        ImGui::SliderFloat3("##CubePosition", &test_cube_position.x, -20.0f, 20.0f);
+
+        ImGui::Text("Scale");
+        ImGui::SliderFloat3("##CubeScale", &test_cube_scale.x, 0.1f, 5.0f);
+
+        ImGui::Text("Color (Brightness)");
+        ImGui::SliderFloat3("##CubeColor", &test_cube_color.x, 0.0f, 15.0f);
+    }
+
+    ImGui::Separator();
+
     if (ImGui::CollapsingHeader("INSTANCING")) {
         auto instance_controller = engine::core::Controller::get<InstanceController>();
 

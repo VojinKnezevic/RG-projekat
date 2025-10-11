@@ -14,8 +14,10 @@ namespace engine::graphics {
         {
             if (m_quad_vao == 0) {
                 float quadVertices[] = {
-                        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-                        1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+                        -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+                        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+                         1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+                         1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
                 };
                 CHECKED_GL_CALL(glGenVertexArrays, 1, &m_quad_vao);
                 CHECKED_GL_CALL(glGenBuffers, 1, &m_quad_vbo);
@@ -113,6 +115,7 @@ namespace engine::graphics {
         const unsigned int amount = bloom_passes;
         for (unsigned int i = 0; i < amount; ++i) {
             CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, m_pingpong_fbo[horizontal]);
+            CHECKED_GL_CALL(glViewport, 0, 0, m_scr_width, m_scr_height);
             blur_shader->set_int("horizontal", horizontal);
             CHECKED_GL_CALL(glActiveTexture, GL_TEXTURE0);
             CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D,
@@ -156,6 +159,7 @@ namespace engine::graphics {
 
     void BloomController::finalize_bloom() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        CHECKED_GL_CALL(glViewport, 0, 0, m_scr_width, m_scr_height);
         render_bloom();
     }
 

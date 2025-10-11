@@ -6,8 +6,8 @@
 namespace engine::graphics {
     class BloomController final : public core::Controller {
     public:
-        int bloom_passes     = 10;
-        float exposure       = 1.3f;
+        int bloom_passes     = 25;
+        float exposure       = 0.9f;
         bool bloom           = true;
         float bloom_strength = 1.0f;
 
