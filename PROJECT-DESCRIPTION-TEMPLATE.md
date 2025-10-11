@@ -1,4 +1,4 @@
-# {NAME-OF-THE-PROJECT}
+# {DRIVING INTO SUNSET}
 
 {mi22104} - {Vojin Knezevic}  
 Simple road scene with some lamp posts and a car driving in the sunset
