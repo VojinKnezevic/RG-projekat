@@ -33,8 +33,8 @@ public:
      * @brief  Default camera values
      */
 
-    static constexpr float YAW = 30.0f;
-    static constexpr float PITCH = 45.0f;
+    static constexpr float YAW = 90.0f;
+    static constexpr float PITCH = 50.0f;
     static constexpr float SPEED = 2.5f;
     static constexpr float SENSITIVITY = 0.1f;
     static constexpr float ZOOM = 45.0f;
@@ -85,7 +85,7 @@ public:
     /**
      * @brief  constructor with vectors.
      */
-    explicit Camera(glm::vec3 position = glm::vec3(20.5f, 0.0f, -15.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+    explicit Camera(glm::vec3 position = glm::vec3(20.5f, 0.0f, -10.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
                     float yaw = YAW, float pitch = PITCH);
 
     /**

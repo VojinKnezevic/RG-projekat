@@ -27,7 +27,7 @@ void GuiController::initialize() {
     // Initialize car headlight spotlights
     // Headlight 1 (Left)
     spot_lights[0].enabled = true;
-    spot_lights[0].position = glm::vec3(11.364f, 0.227f, 5.843f);
+    spot_lights[0].position = glm::vec3(11.136f, 0.682f, 6.067f);
     spot_lights[0].direction = glm::vec3(0.227f, -0.159f, -1.0f);
     spot_lights[0].color = glm::vec3(4.0f, 3.5f, 2.5f); // Bright warm white
     spot_lights[0].constant = 0.169f;
@@ -38,7 +38,7 @@ void GuiController::initialize() {
 
     // Headlight 2 (Right)
     spot_lights[1].enabled = true;
-    spot_lights[1].position = glm::vec3(12.464f, 0.227f, 5.843f);
+    spot_lights[1].position = glm::vec3(12.5f, 0.682f, 6.067f);
     spot_lights[1].direction = glm::vec3(-0.227f, -0.159f, -1.0f);
     spot_lights[1].color = glm::vec3(4.0f, 3.5f, 2.5f); // Bright warm white
     spot_lights[1].constant = 0.169f;

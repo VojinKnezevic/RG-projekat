@@ -42,14 +42,8 @@ namespace engine::graphics {
         CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, m_hdr_fbo);
         CHECKED_GL_CALL(glGenTextures, 2, m_color_buffers);
 
-        if (m_scr_width == 0)
-            m_scr_width = 1400;
-        else
-            m_scr_width = get<platform::PlatformController>()->window()->width();
-        if (m_scr_height == 0)
-            m_scr_height = 1000;
-        else
-            m_scr_height = get<platform::PlatformController>()->window()->height();
+        m_scr_width = 1600;
+        m_scr_height = 1200;
         for (unsigned int i = 0; i < 2; ++i) {
             CHECKED_GL_CALL(glBindTexture, GL_TEXTURE_2D, m_color_buffers[i]);
             CHECKED_GL_CALL(glTexImage2D, GL_TEXTURE_2D, 0, GL_RGBA16F, m_scr_width, m_scr_height, 0, GL_RGBA, GL_FLOAT,
@@ -143,14 +137,8 @@ namespace engine::graphics {
     }
 
     void BloomController::prepare_hdr() {
-        if (m_scr_width == 0)
-            m_scr_width = 1400;
-        else
-            m_scr_width = get<platform::PlatformController>()->window()->width();
-        if (m_scr_height == 0)
-            m_scr_height = 1000;
-        else
-            m_scr_height = get<platform::PlatformController>()->window()->height();
+        m_scr_width = 1600;
+        m_scr_height = 1200;
 
         CHECKED_GL_CALL(glBindFramebuffer, GL_FRAMEBUFFER, m_hdr_fbo);
         CHECKED_GL_CALL(glViewport, 0, 0, m_scr_width, m_scr_height);
