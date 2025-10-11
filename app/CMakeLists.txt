@@ -4,6 +4,7 @@ file(GLOB sources src/*.cpp)
 file(GLOB headers include/*.hpp)
 
 include_directories(include/)
+include_directories(../engine/libs/glad/include)
 
 add_executable(${PROJECT_NAME} ${sources} ${headers}
         src/App.cpp

@@ -2,6 +2,7 @@
 #include "../include/InstanceController.hpp"
 
 #include "engine/graphics/GraphicsController.hpp"
+#include "engine/graphics/BloomController.hpp"
 #include "engine/platform/PlatformController.hpp"
 #include "imgui.h"
 
@@ -17,7 +18,7 @@ void GuiController::initialize() {
     for (int i = 0; i < 3; i++) {
         point_lights[i].enabled = true;
         point_lights[i].position = glm::vec3(6.71111f, 1.95f, -8.0f + 8.0f * i);
-        point_lights[i].color = glm::vec3(1.0f, 0.9f, 0.7f);
+        point_lights[i].color = glm::vec3(5.0f, 4.0f, 2.0f);
         point_lights[i].constant = 1.0f;
         point_lights[i].linear = 0.09f;
         point_lights[i].quadratic = 0.032f;
@@ -28,7 +29,7 @@ void GuiController::initialize() {
     spot_lights[0].enabled = true;
     spot_lights[0].position = glm::vec3(11.364f, 0.227f, 5.843f);
     spot_lights[0].direction = glm::vec3(0.227f, -0.159f, -1.0f);
-    spot_lights[0].color = glm::vec3(1.0f, 0.9f, 0.7f); // Warm white
+    spot_lights[0].color = glm::vec3(4.0f, 3.5f, 2.5f); // Bright warm white
     spot_lights[0].constant = 0.169f;
     spot_lights[0].linear = 0.001f;
     spot_lights[0].quadratic = 0.001f;
@@ -39,7 +40,7 @@ void GuiController::initialize() {
     spot_lights[1].enabled = true;
     spot_lights[1].position = glm::vec3(12.464f, 0.227f, 5.843f);
     spot_lights[1].direction = glm::vec3(-0.227f, -0.159f, -1.0f);
-    spot_lights[1].color = glm::vec3(1.0f, 0.9f, 0.7f); // Warm white
+    spot_lights[1].color = glm::vec3(4.0f, 3.5f, 2.5f); // Bright warm white
     spot_lights[1].constant = 0.169f;
     spot_lights[1].linear = 0.001f;
     spot_lights[1].quadratic = 0.001f;
@@ -140,6 +141,17 @@ void GuiController::draw() {
 
             ImGui::PopID();
         }
+    }
+
+    ImGui::Separator();
+
+    if (ImGui::CollapsingHeader("BLOOM EFFECT")) {
+        auto bloom_controller = engine::core::Controller::get<engine::graphics::BloomController>();
+
+        ImGui::Checkbox("Enable Bloom", &bloom_controller->bloom);
+        ImGui::SliderFloat("Exposure", &bloom_controller->exposure, 0.1f, 5.0f);
+        ImGui::SliderFloat("Bloom Strength", &bloom_controller->bloom_strength, 0.0f, 2.0f);
+        ImGui::SliderInt("Blur Passes", &bloom_controller->bloom_passes, 1, 20);
     }
 
     ImGui::Separator();

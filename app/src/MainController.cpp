@@ -2,6 +2,7 @@
 
 #include "GuiController.hpp"
 #include "InstanceController.hpp"
+#include "engine/graphics/BloomController.hpp"
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/OpenGL.hpp"
 #include "engine/platform/PlatformController.hpp"
@@ -39,9 +40,13 @@ bool MainController::loop() {
     return true;
 }
 void MainController::begin_draw() {
-    engine::graphics::OpenGL::clear_buffers();
+    auto bloom_controller = engine::core::Controller::get<engine::graphics::BloomController>();
+    bloom_controller->prepare_hdr();
 }
 void MainController::end_draw() {
+    auto bloom_controller = engine::core::Controller::get<engine::graphics::BloomController>();
+    bloom_controller->finalize_bloom();
+
     auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
     platform->swap_buffers();
 }
@@ -52,7 +57,7 @@ void MainController::draw_road() {
     auto instance_controller = engine::core::Controller::get<InstanceController>();
     engine::resources::Model *road = resource->model("road_segment");
 
-    engine::resources::Shader *shader = resource->shader("gltf");
+    engine::resources::Shader *shader = resource->shader("basic");
 
     shader->use();
     shader->set_mat4("projection", graphics->projection_matrix());
@@ -124,7 +129,7 @@ void MainController::draw_lamp_post() {
     auto gui_controller = engine::core::Controller::get<GuiController>();
     engine::resources::Model *lamp_post = resource->model("lamp_post");
 
-    engine::resources::Shader *shader = resource->shader("gltf");
+    engine::resources::Shader *shader = resource->shader("basic");
 
     shader->use();
     shader->set_mat4("projection", graphics->projection_matrix());
@@ -198,7 +203,7 @@ void MainController::draw_light_bulbs() {
     auto gui_controller = engine::core::Controller::get<GuiController>();
     engine::resources::Model *light_bulb = resource->model("light_bulb");
 
-    engine::resources::Shader *shader = resource->shader("gltf");
+    engine::resources::Shader *shader = resource->shader("basic");
 
     shader->use();
     shader->set_mat4("projection", graphics->projection_matrix());
