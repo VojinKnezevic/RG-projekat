@@ -1,5 +1,5 @@
 #include "../include/GuiController.hpp"
-#include "../include/InstanceController.hpp"
+#include <engine/graphics/InstanceController.hpp>
 
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/BloomController.hpp"
@@ -170,7 +170,7 @@ void GuiController::draw() {
     ImGui::Separator();
 
     if (ImGui::CollapsingHeader("INSTANCING")) {
-        auto instance_controller = engine::core::Controller::get<InstanceController>();
+        auto instance_controller = engine::core::Controller::get<engine::graphics::InstanceController>();
 
         ImGui::Checkbox("Use Instanced Rendering", &instance_controller->use_instanced_rendering);
 

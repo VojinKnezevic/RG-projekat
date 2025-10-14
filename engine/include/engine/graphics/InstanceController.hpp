@@ -4,7 +4,7 @@
 #include <engine/core/Controller.hpp>
 #include <glm/glm.hpp>
 
-namespace app {
+namespace engine::graphics {
 
 class InstanceController : public engine::core::Controller {
 public:
@@ -28,6 +28,6 @@ private:
     void poll_events() override;
 };
 
-} // namespace app
+} // namespace engine::graphics
 
 #endif //MATF_RG_PROJECT_INSTANCECONTROLLER_H

@@ -1,9 +1,9 @@
-#include "InstanceController.hpp"
+#include <engine/graphics/InstanceController.hpp>
 
-namespace app {
+namespace engine::graphics {
 
 std::string_view InstanceController::name() const {
-    return "app::InstanceController";
+    return "engine::graphics::InstanceController";
 }
 
 void InstanceController::initialize() {
@@ -15,4 +15,4 @@ void InstanceController::draw() {
 void InstanceController::poll_events() {
 }
 
-} // namespace app
+} // namespace engine::graphics

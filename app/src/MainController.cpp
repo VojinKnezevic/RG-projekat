@@ -1,7 +1,7 @@
 #include "../include/MainController.hpp"
 
 #include "GuiController.hpp"
-#include "InstanceController.hpp"
+#include <engine/graphics/InstanceController.hpp>
 #include "engine/graphics/BloomController.hpp"
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/OpenGL.hpp"
@@ -56,7 +56,7 @@ void MainController::draw_road() {
     auto resource = engine::core::Controller::get<engine::resources::ResourcesController>();
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
     auto gui_controller = engine::core::Controller::get<GuiController>();
-    auto instance_controller = engine::core::Controller::get<InstanceController>();
+    auto instance_controller = engine::core::Controller::get<engine::graphics::InstanceController>();
     engine::resources::Model *road = resource->model("road_segment");
 
     engine::resources::Shader *shader = resource->shader("basic");
@@ -171,7 +171,7 @@ void MainController::draw_lamp_post() {
     }
 
     // Simple lamp rendering - check if we should use instanced count
-    auto instance_controller = engine::core::Controller::get<InstanceController>();
+    auto instance_controller = engine::core::Controller::get<engine::graphics::InstanceController>();
     int lampCount = 3; // default
     glm::vec3 startPos = glm::vec3(6.0f, -0.7f, -8.0f);
     float spacing = 8.0f;

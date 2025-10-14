@@ -1,6 +1,6 @@
 #include "GuiController.hpp"
 #include "MainController.hpp"
-#include "InstanceController.hpp"
+#include "engine/graphics/InstanceController.hpp"
 #include "engine/graphics/BloomController.hpp"
 #include "spdlog/spdlog.h"
 
@@ -13,7 +13,7 @@ void MyApp::app_setup() {
 
     auto main_controller = register_controller<app::MainController>();
     auto gui_controller = register_controller<app::GuiController>();
-    auto instance_controller = register_controller<app::InstanceController>();
+    auto instance_controller = register_controller<engine::graphics::InstanceController>();
     auto bloom_controller = register_controller<engine::graphics::BloomController>();
 
     main_controller->after(engine::core::Controller::get<engine::core::EngineControllersEnd>());
