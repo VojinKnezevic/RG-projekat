@@ -8,7 +8,6 @@
 #include "engine/platform/PlatformController.hpp"
 #include "engine/resources/Mesh.hpp"
 #include "engine/resources/ResourcesController.hpp"
-#include <glad/glad.h>
 #include "spdlog/spdlog.h"
 
 namespace app {
@@ -410,21 +409,21 @@ void MainController::setup_cube() {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
-    glGenVertexArrays(1, &m_cube_vao);
-    glGenBuffers(1, &m_cube_vbo);
+    engine::graphics::OpenGL::generate_vertex_arrays(1, &m_cube_vao);
+    engine::graphics::OpenGL::generate_buffers(1, &m_cube_vbo);
 
-    glBindVertexArray(m_cube_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_cube_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
+    engine::graphics::OpenGL::bind_vertex_array(m_cube_vao);
+    engine::graphics::OpenGL::bind_buffer(engine::graphics::gl::array_buffer, m_cube_vbo);
+    engine::graphics::OpenGL::buffer_data(engine::graphics::gl::array_buffer, sizeof(cube_vertices), cube_vertices, engine::graphics::gl::static_draw);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    engine::graphics::OpenGL::vertex_attrib_pointer(0, 3, engine::graphics::gl::float_type, engine::graphics::gl::false_value, 8 * sizeof(float), (void*)0);
+    engine::graphics::OpenGL::enable_vertex_attrib_array(0);
+    engine::graphics::OpenGL::vertex_attrib_pointer(1, 3, engine::graphics::gl::float_type, engine::graphics::gl::false_value, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    engine::graphics::OpenGL::enable_vertex_attrib_array(1);
+    engine::graphics::OpenGL::vertex_attrib_pointer(2, 2, engine::graphics::gl::float_type, engine::graphics::gl::false_value, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    engine::graphics::OpenGL::enable_vertex_attrib_array(2);
 
-    glBindVertexArray(0);
+    engine::graphics::OpenGL::bind_vertex_array(0);
 }
 
 void MainController::draw_test_cube() {
@@ -448,9 +447,9 @@ void MainController::draw_test_cube() {
     shader->set_mat4("model", model);
     shader->set_vec3("color", gui_controller->test_cube_color);
 
-    glBindVertexArray(m_cube_vao);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    engine::graphics::OpenGL::bind_vertex_array(m_cube_vao);
+    engine::graphics::OpenGL::draw_arrays(engine::graphics::gl::triangles, 0, 36);
+    engine::graphics::OpenGL::bind_vertex_array(0);
 }
 
 }// namespace app
