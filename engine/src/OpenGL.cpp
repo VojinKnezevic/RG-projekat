@@ -50,6 +50,7 @@ uint32_t OpenGL::generate_texture(const std::filesystem::path &path, bool flip_u
 int32_t OpenGL::texture_format(int32_t number_of_channels) {
     switch (number_of_channels) {
         case 1: return GL_RED;
+        case 2: return GL_RG;
         case 3: return GL_RGB;
         case 4: return GL_RGBA;
         default: RG_SHOULD_NOT_REACH_HERE("Unknown channels {}", number_of_channels);
@@ -180,6 +181,38 @@ void OpenGL::disable_depth_testing() {
 
 void OpenGL::clear_buffers() {
     CHECKED_GL_CALL(glClear, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
+void OpenGL::generate_vertex_arrays(uint32_t n, uint32_t* arrays) {
+    CHECKED_GL_CALL(glGenVertexArrays, n, arrays);
+}
+
+void OpenGL::generate_buffers(uint32_t n, uint32_t* buffers) {
+    CHECKED_GL_CALL(glGenBuffers, n, buffers);
+}
+
+void OpenGL::bind_vertex_array(uint32_t array) {
+    CHECKED_GL_CALL(glBindVertexArray, array);
+}
+
+void OpenGL::bind_buffer(uint32_t target, uint32_t buffer) {
+    CHECKED_GL_CALL(glBindBuffer, target, buffer);
+}
+
+void OpenGL::buffer_data(uint32_t target, intptr_t size, const void* data, uint32_t usage) {
+    CHECKED_GL_CALL(glBufferData, target, size, data, usage);
+}
+
+void OpenGL::vertex_attrib_pointer(uint32_t index, int32_t size, uint32_t type, bool normalized, int32_t stride, const void* pointer) {
+    CHECKED_GL_CALL(glVertexAttribPointer, index, size, type, normalized, stride, pointer);
+}
+
+void OpenGL::enable_vertex_attrib_array(uint32_t index) {
+    CHECKED_GL_CALL(glEnableVertexAttribArray, index);
+}
+
+void OpenGL::draw_arrays(uint32_t mode, int32_t first, int32_t count) {
+    CHECKED_GL_CALL(glDrawArrays, mode, first, count);
 }
 
 uint32_t face_index(std::string_view name) {
