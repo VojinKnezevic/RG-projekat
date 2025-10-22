@@ -384,7 +384,7 @@ void MainController::draw_test_cube() {
     shader->set_mat4("model", model);
     shader->set_vec3("color", gui_controller->test_cube_color);
 
-    engine::graphics::OpenGL::draw_test_cube();
+    graphics->draw_test_cube();
 }
 
 }// namespace app
