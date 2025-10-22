@@ -1,11 +1,26 @@
 {
   "resources": {
     "models": {
+      "backpack" : {
+        "path" : "backpack/backpack.obj"
+      },
+      "road_segment" : {
+        "path" : "road_segment/scene.gltf"
+      },
+      "lamp_post" : {
+        "path" : "lamp_post/scene.gltf"
+      },
+      "light_bulb" : {
+        "path" : "light_bulb/scene.gltf"
+      },
+      "nissan" : {
+        "path" : "nissan/s15.obj"
+      }
     }
   },
   "window": {
-    "height": 600,
+    "height": 1200,
     "title": "Hello, window!",
-    "width": 800
+    "width": 1600
   }
 }

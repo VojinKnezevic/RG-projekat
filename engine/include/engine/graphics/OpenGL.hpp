@@ -28,6 +28,15 @@ class Skybox;
 #define CHECKED_GL_CALL(func, ...) engine::graphics::OpenGL::call(std::source_location::current(), func, __VA_ARGS__)
 
 namespace engine::graphics {
+
+namespace gl {
+    constexpr uint32_t array_buffer = 0x8892;
+    constexpr uint32_t static_draw = 0x88E4;
+    constexpr uint32_t float_type = 0x1406;
+    constexpr uint32_t false_value = 0;
+    constexpr uint32_t triangles = 0x0004;
+}
+
 /**
 * @class OpenGL
 * @brief This class serves as the OpenGL interface for your app, since the engine doesn't directly link OpenGL to the app executable.
@@ -134,11 +143,15 @@ public:
     */
     static void clear_buffers();
 
-    /**
-    * @brief Retrieve the shader compilation error log message.
-    * @param shader_id Shader id for which the compilation failed.
-    * @returns shader compilation error message.
-    */
+    static void generate_vertex_arrays(uint32_t n, uint32_t* arrays);
+    static void generate_buffers(uint32_t n, uint32_t* buffers);
+    static void bind_vertex_array(uint32_t array);
+    static void bind_buffer(uint32_t target, uint32_t buffer);
+    static void buffer_data(uint32_t target, intptr_t size, const void* data, uint32_t usage);
+    static void vertex_attrib_pointer(uint32_t index, int32_t size, uint32_t type, bool normalized, int32_t stride, const void* pointer);
+    static void enable_vertex_attrib_array(uint32_t index);
+    static void draw_arrays(uint32_t mode, int32_t first, int32_t count);
+
     static std::string get_compilation_error_message(uint32_t shader_id);
 
 private:
