@@ -152,6 +152,9 @@ public:
     static void enable_vertex_attrib_array(uint32_t index);
     static void draw_arrays(uint32_t mode, int32_t first, int32_t count);
 
+    static uint32_t init_test_cube();
+    static void draw_test_cube();
+
     static std::string get_compilation_error_message(uint32_t shader_id);
 
 private:

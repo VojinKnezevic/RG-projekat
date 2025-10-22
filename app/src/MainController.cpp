@@ -29,7 +29,6 @@ void MainController::initialize() {
     auto platform = engine::platform::PlatformController::get<engine::platform::PlatformController>();
     platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
     engine::graphics::OpenGL::enable_depth_testing();
-    setup_cube();
     spdlog::info("Main controller initialized!!");
 }
 bool MainController::loop() {
@@ -364,68 +363,6 @@ void MainController::update() {
     update_camera();
 }
 
-void MainController::setup_cube() {
-    float cube_vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-    };
-
-    engine::graphics::OpenGL::generate_vertex_arrays(1, &m_cube_vao);
-    engine::graphics::OpenGL::generate_buffers(1, &m_cube_vbo);
-
-    engine::graphics::OpenGL::bind_vertex_array(m_cube_vao);
-    engine::graphics::OpenGL::bind_buffer(engine::graphics::gl::array_buffer, m_cube_vbo);
-    engine::graphics::OpenGL::buffer_data(engine::graphics::gl::array_buffer, sizeof(cube_vertices), cube_vertices, engine::graphics::gl::static_draw);
-
-    engine::graphics::OpenGL::vertex_attrib_pointer(0, 3, engine::graphics::gl::float_type, engine::graphics::gl::false_value, 8 * sizeof(float), (void*)0);
-    engine::graphics::OpenGL::enable_vertex_attrib_array(0);
-    engine::graphics::OpenGL::vertex_attrib_pointer(1, 3, engine::graphics::gl::float_type, engine::graphics::gl::false_value, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    engine::graphics::OpenGL::enable_vertex_attrib_array(1);
-    engine::graphics::OpenGL::vertex_attrib_pointer(2, 2, engine::graphics::gl::float_type, engine::graphics::gl::false_value, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    engine::graphics::OpenGL::enable_vertex_attrib_array(2);
-
-    engine::graphics::OpenGL::bind_vertex_array(0);
-}
-
 void MainController::draw_test_cube() {
     auto resource = engine::core::Controller::get<engine::resources::ResourcesController>();
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
@@ -447,9 +384,7 @@ void MainController::draw_test_cube() {
     shader->set_mat4("model", model);
     shader->set_vec3("color", gui_controller->test_cube_color);
 
-    engine::graphics::OpenGL::bind_vertex_array(m_cube_vao);
-    engine::graphics::OpenGL::draw_arrays(engine::graphics::gl::triangles, 0, 36);
-    engine::graphics::OpenGL::bind_vertex_array(0);
+    engine::graphics::OpenGL::draw_test_cube();
 }
 
 }// namespace app
